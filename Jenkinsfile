@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    registry = "argentinapayments6785/myweb"
+    registry = "6785/myweb"
     registryCredential = "dockerhub"
     dockerImage = ""
   }
