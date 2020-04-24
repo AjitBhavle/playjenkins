@@ -2,7 +2,7 @@ pipeline {
 
   environment {
     docker_tag = getDockerTag()
-    registry = "6785/myweb"
+    registry = "6785/myweb:${docker_tag}"
     registryCredential = "dockerhub"
     dockerImage = ""
   }
@@ -20,7 +20,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$docker_tag"
+          dockerImage = docker.build registry
         }
       }
     }
@@ -44,7 +44,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registry:$docker_tag"
+        sh "docker rmi $registry"
       }
     }
 
