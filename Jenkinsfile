@@ -1,6 +1,7 @@
 pipeline {
 
   environment {
+    docker_tag = getDockerTag()
     registry = "6785/myweb"
     registryCredential = "dockerhub"
     dockerImage = ""
@@ -19,7 +20,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build registry + ":$docker_tag"
         }
       }
     }
@@ -37,16 +38,21 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
+          kubernetesDeploy(configs: "new_myweb.yaml", kubeconfigId: "mykubeconfig")
         }
       }
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
+        sh "docker rmi $registry:$docker_tag"
       }
     }
 
   }
 
+}
+
+def getDockerTag(){
+    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
+    return tag
 }
