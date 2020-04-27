@@ -20,7 +20,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = sh ("docker build -t registry .")
+          dockerImage = sh ("docker build -t ${registry} .")
         }
       }
     }
@@ -29,7 +29,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-           sh ("docker push dockerImage")
+           sh ("docker push ${registry}")
           }
         }
       }
