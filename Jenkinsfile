@@ -14,7 +14,7 @@ pipeline {
     stage('Checkout Source') {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
-        sh "chmod +X imageTag.sh"
+        sh "chmod +x imageTag.sh"
         sh "./imageTag.sh ${docker_tag}"
       }
     }
