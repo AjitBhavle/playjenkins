@@ -20,7 +20,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = sh "docker build . -t ${registry}"
+          dockerImage = sh ("docker build -t ${registry} .")
         }
       }
     }
