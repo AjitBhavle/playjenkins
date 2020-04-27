@@ -20,7 +20,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = "docker.build registry ."
+          dockerImage = "docker.build -t registry ."
         }
       }
     }
@@ -38,7 +38,7 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "new_myweb.yaml", kubeconfigId: "mykubeconfig")
+          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
         }
       }
     }
