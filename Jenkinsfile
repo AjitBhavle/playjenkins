@@ -14,6 +14,8 @@ pipeline {
     stage('Checkout Source') {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
+        sh "chmod +x imageTag.sh"
+        sh "./imageTag.sh ${docker_tag}"
       }
     }
 
@@ -36,8 +38,6 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          sh "chmod +X imageTag.sh"
-          sh "./imageTag.sh ${docker_tag}"
           kubernetesDeploy(configs: "new_myweb.yaml", kubeconfigId: "mykubeconfig")
         }
       }
