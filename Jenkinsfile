@@ -36,7 +36,9 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
+          sh "chmod +X imageTag.sh"
+          sh "./imageTag.sh ${docker_tag}"
+          kubernetesDeploy(configs: "new_myweb.yaml", kubeconfigId: "mykubeconfig")
         }
       }
     }
