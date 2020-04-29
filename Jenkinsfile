@@ -48,13 +48,8 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-	   script {
 	   
-	   if(prev_docker_tag == null)
-	      echo "No Prev_tag available to delete"
-	   else
     	   sh "docker rmi -f $prev_registry"
-          }
       }
     }
     
