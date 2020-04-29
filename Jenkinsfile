@@ -17,7 +17,6 @@ pipeline {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
 		
-		echo "${prev_docker_tag}"
         sh "chmod +x imageTag.sh"
         sh "./imageTag.sh ${docker_tag}"
       }
@@ -48,7 +47,6 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-	   
     	   sh "docker rmi -f $prev_registry"
       }
     }
