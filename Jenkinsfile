@@ -1,9 +1,9 @@
 pipeline {
 
   environment {
-    docker_tag = getDockerTag()
+    docker_tag = getLatestCommitId()	
     registry = "6785/myweb:${docker_tag}"
-	prev_docker_tag = getDockerTagToDeleteImg()
+	prev_docker_tag = getSecLastCommitIdToDeleteImg()
 	prev_registry = "6785/myweb:${prev_docker_tag}"
     registryCredential = "dockerhub"
     dockerImage = ""
@@ -17,6 +17,7 @@ pipeline {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
 		
+		echo "${prev_docker_tag}"
         sh "chmod +x imageTag.sh"
         sh "./imageTag.sh ${docker_tag}"
       }
@@ -47,19 +48,25 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-    	   sh "docker rmi -f $prev_registry"
-      }
-    }
+	   script {
+	   
+			if(prev_docker_tag == null)
+				echo "No Prev_tag available to delete"
+			else
+				sh "docker rmi -f $prev_registry"
+			}
+		}
+	}
     
   }
 
 }
 
-def getDockerTag(){
+def getLatestCommitId(){
     def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
     return tag
 }
-def getDockerTagToDeleteImg(){
+def getSecLastCommitIdToDeleteImg(){
     def previous_tag  = sh script: 'git rev-parse @~', returnStdout: true
     return previous_tag
 }
