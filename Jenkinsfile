@@ -4,7 +4,6 @@ pipeline {
     docker_tag = getDockerTag()
     registry = "6785/myweb:${docker_tag}"
 	prev_docker_tag = getDockerTagToDeleteImg()
-	echo $prev_docker_tag
 	prev_registry = "6785/myweb:${prev_docker_tag}"
     registryCredential = "dockerhub"
     dockerImage = ""
@@ -17,6 +16,8 @@ pipeline {
     stage('Checkout Source') {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
+		
+		echo $prev_docker_tag
         sh "chmod +x imageTag.sh"
         sh "./imageTag.sh ${docker_tag}"
       }
@@ -48,6 +49,7 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
 	   script {
+	   
 	   if(prev_docker_tag == null)
 	      echo "No Prev_tag available to delete"
 	   else
