@@ -17,7 +17,7 @@ pipeline {
       steps {
         git 'https://github.com/AjitBhavle/playjenkins.git'
 		
-		echo $prev_docker_tag
+		echo "${prev_docker_tag}"
         sh "chmod +x imageTag.sh"
         sh "./imageTag.sh ${docker_tag}"
       }
